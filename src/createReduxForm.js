@@ -176,6 +176,7 @@ export type Config = {
   forceUnregisterOnUnmount?: boolean,
   enableReinitialize?: boolean,
   keepDirtyOnReinitialize?: boolean,
+  keepFieldsStateOnReinitialize?: boolean,
   keepValues?: boolean,
   form: string,
   immutableProps?: string[],
@@ -232,6 +233,7 @@ export type Props = {
   initialValues?: any,
   invalid: boolean,
   keepDirtyOnReinitialize: any,
+  keepFieldsStateOnReinitialize?: boolean,
   keepValues?: boolean,
   updateUnregisteredFields: boolean,
   onChange?: OnChangeFunction,
@@ -295,6 +297,7 @@ const createReduxForm = (structure: Structure<*, *>) => {
       shouldWarn: defaultShouldWarn,
       enableReinitialize: false,
       keepDirtyOnReinitialize: false,
+      keepFieldsStateOnReinitialize: false,
       updateUnregisteredFields: false,
       getFormState: state => getIn(state, 'form'),
       pure: true,
@@ -345,6 +348,7 @@ const createReduxForm = (structure: Structure<*, *>) => {
               const keepDirty =
                 nextProps.initialized && this.props.keepDirtyOnReinitialize
               this.props.initialize(nextProps.initialValues, keepDirty, {
+                keepFieldState: this.props.keepFieldsStateOnReinitialize,
                 keepValues: nextProps.keepValues,
                 lastInitialValues: this.props.initialValues,
                 updateUnregisteredFields: nextProps.updateUnregisteredFields
@@ -358,6 +362,7 @@ const createReduxForm = (structure: Structure<*, *>) => {
               this.props.initialValues,
               this.props.keepDirtyOnReinitialize,
               {
+                keepFieldState: this.props.keepFieldsStateOnReinitialize,
                 keepValues: this.props.keepValues,
                 updateUnregisteredFields: this.props.updateUnregisteredFields
               }

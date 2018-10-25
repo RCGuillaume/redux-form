@@ -381,6 +381,7 @@ function createReducer<M, L>(structure: Structure<M, L>) {
         payload,
         meta: {
           keepDirty,
+          keepFieldState,
           keepSubmitSucceeded,
           updateUnregisteredFields,
           keepValues
@@ -389,6 +390,21 @@ function createReducer<M, L>(structure: Structure<M, L>) {
     ) {
       const mapData = fromJS(payload)
       let result = empty // clean all field state
+
+      if (keepFieldState) {
+        const fields = getIn(state, 'fields')
+        if (fields) {
+          result = setIn(result, 'fields', fields)
+        }
+        const anyTouched = getIn(state, 'anyTouched')
+        if (anyTouched) {
+          result = setIn(result, 'anyTouched', anyTouched)
+        }
+        const active = getIn(state, 'active')
+        if (active) {
+          result = setIn(result, 'active', active)
+        }
+      }
 
       // persist old warnings, they will get recalculated if the new form values are different from the old values
       const warning = getIn(state, 'warning')
